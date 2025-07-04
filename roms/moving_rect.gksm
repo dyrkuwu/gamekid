@@ -1,0 +1,95 @@
+ldm 0x0200, 8 ; (x)
+ldm 0x0201, 8 ; (y)  
+ldm 0x0202, 8 ; (prev_x)
+ldm 0x0203, 8 ; (prev_y)
+
+ldr r1, 0
+ldr r3, 15
+ldr r7, 2
+
+main:
+    ldrm r0, 0x07FE
+
+    ldr r5, 1
+    andrr r5, r0
+    cmprr r5, r1
+    jnz move_up
+
+    ldr r5, 2
+    andrr r5, r0
+    cmprr r5, r1
+    jnz move_down
+
+    ldr r5, 4
+    andrr r5, r0
+    cmprr r5, r1
+    jnz move_left
+
+    ldr r5, 8
+    andrr r5, r0
+    cmprr r5, r1
+    jnz move_right
+
+    jmp draw
+
+move_up:
+    ldrm r6, 0x0201 ; (y)
+    cmprr r6, r1
+    jz draw
+    decr r6
+    ldmr 0x0201, r6
+    jmp draw
+
+move_down:
+    ldrm r6, 0x0201 ; (y)
+    cmprr r6, r3
+    jz draw
+    incr r6
+    ldmr 0x0201, r6
+    jmp draw
+
+move_left:
+    ldrm r6, 0x0200 ; (x)
+    cmprr r6, r1
+    jz draw
+    decr r6
+    ldmr 0x0200, r6
+    jmp draw
+
+move_right:
+    ldrm r6, 0x0200 ; (x)
+    cmprr r6, r3
+    jz draw
+    incr r6
+    ldmr 0x0200, r6
+
+draw:
+    ldrm r5, 0x0200 ; (x)
+    ldrm r6, 0x0202 ; (prev_x)
+    cmprr r5, r6
+    jnz clear_old
+    ldrm r5, 0x0201 ; (y)
+    ldrm r6, 0x0203 ; (prev_y)
+    cmprr r5, r6
+    jz update_pos
+
+clear_old:
+    ldrm r5, 0x0203 ; (prev_y)
+    shlr r5, 4
+    ldrm r6, 0x0202 ; (prev_x)
+    addrr r5, r6
+    ldir r5, r1
+
+update_pos:
+    ldrm r5, 0x0201 ; (y)
+    shlr r5, 4
+    ldrm r6, 0x0200 ; (x)
+    addrr r5, r6
+    ldir r5, r7
+
+    ldmm 0x0202, 0x0200 ; (prev_x = x)
+    ldmm 0x0203, 0x0201 ; (prev_y = y)
+
+    jmp main
+
+halt

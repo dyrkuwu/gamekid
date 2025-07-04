@@ -1,0 +1,7 @@
+[project]
+name = "gksm"
+version = "0.1.0"
+description = "compiler for the gamekid assembly"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = []

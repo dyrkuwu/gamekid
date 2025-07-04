@@ -1,0 +1,109 @@
+ldm 0x0200, 8
+ldm 0x0201, 8  
+ldm 0x0202, 0
+
+ldr r0, 0
+ldr r1, 1
+ldr r2, 15
+ldr r3, 3
+
+main_loop:
+    ldrm r4, 0x0201
+    shlr r4, 4
+    ldrm r5, 0x0200
+    addrr r4, r5
+    
+    ldri r6, r4
+    
+    cmprr r6, r0
+    jz white_cell
+    jmp black_cell
+
+white_cell:
+    ldir r4, r1
+    ldrm r7, 0x0202
+    incr r7
+    ldr r8, 4
+    cmprr r7, r8
+    jnz store_direction
+    ldr r7, 0
+    jmp store_direction
+
+black_cell:
+    ldir r4, r0
+    ldrm r7, 0x0202
+    cmprr r7, r0
+    jz wrap_to_three
+    decr r7
+    jmp store_direction
+    
+wrap_to_three:
+    ldr r7, 3
+    
+store_direction:
+    ldmr 0x0202, r7
+    
+move_ant:
+    ldrm r7, 0x0202
+    
+    cmprr r7, r0
+    jz move_up
+    
+    cmprr r7, r1
+    jz move_right
+    
+    ldr r8, 2
+    cmprr r7, r8
+    jz move_down
+    
+    jmp move_left
+    
+move_up:
+    ldrm r5, 0x0201
+    cmprr r5, r0
+    jz wrap_up
+    decr r5
+    ldmr 0x0201, r5
+    jmp main_loop
+    
+wrap_up:
+    ldmr 0x0201, r2
+    jmp main_loop
+    
+move_down:
+    ldrm r5, 0x0201
+    cmprr r5, r2
+    jz wrap_down
+    incr r5
+    ldmr 0x0201, r5
+    jmp main_loop
+    
+wrap_down:
+    ldmr 0x0201, r0
+    jmp main_loop
+    
+move_right:
+    ldrm r5, 0x0200
+    cmprr r5, r2
+    jz wrap_right
+    incr r5
+    ldmr 0x0200, r5
+    jmp main_loop
+    
+wrap_right:
+    ldmr 0x0200, r0
+    jmp main_loop
+    
+move_left:
+    ldrm r5, 0x0200
+    cmprr r5, r0
+    jz wrap_left
+    decr r5
+    ldmr 0x0200, r5
+    jmp main_loop
+    
+wrap_left:
+    ldmr 0x0200, r2
+    jmp main_loop
+
+halt 
