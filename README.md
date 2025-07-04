@@ -14,7 +14,12 @@ cargo run -- --rom <rom_file> --debug
 - `--rom` - optional, loads a specific rom file (otherwise runs the fallback rom)
 - `--debug` - optional, enables debug output
 
-press **space** to play/pause the emulation
+## controls
+
+- **space** - play/pause the emulation
+- **tab** - advance one cycle (when paused)
+- **arrow keys** - directional input (if the game supports it)
+- **z** and **x** - action buttons (if the game supports it)
 
 ## compiling games
 
