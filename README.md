@@ -1,12 +1,36 @@
-# GameKid
+# gamekid
 
-a virtual Machine / emulator / bytecode interpreter for a non-existent gameboy clone from 1990s
+a virtual machine / emulator / bytecode interpreter for a non-existent gameboy clone from the 1990s
+
+## running the emulator
+
+to run the emulator:
+```bash
+./gamekid --rom <rom_file> --debug
+# or
+cargo run -- --rom <rom_file> --debug
+```
+
+- `--rom` - optional, loads a specific rom file (otherwise runs the fallback rom)
+- `--debug` - optional, enables debug output
+
+press **space** to play/pause the emulation
+
+## compiling games
 
 `/gksm` contains a compiler for .gksm files (check `/roms` for examples)
 
-to run use ```(./gamekid / cargo run --``` --rom (optional, otherwise runs the fallback rom) --debug (optional)```
-(!) important, to run a rom you need to compile gksm (human readable assembly) into a rom (bytecode binary) with the gksm compiler
+to compile a .gksm file into a rom:
+```bash
+uv run main.py game.gksm -v
+# or
+python main.py game.gksm -v
+```
 
-to run gksm compiler, use ```(uv run / python) main.py game.gksm -v (optional)```
+- `-v` - optional, verbose output
 
-all documentation for instructions / memory sectors is at the top of `/src/main.rs`
+**important**: you need to compile .gksm files (human readable assembly) into rom files (bytecode binary) before running them in the emulator
+
+## documentation
+
+all documentation for instructions and memory sectors is at the top of `/src/main.rs`
