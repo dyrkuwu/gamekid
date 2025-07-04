@@ -1,5 +1,4 @@
 use clap::Parser;
-use error_iter::ErrorIter as _;
 use pixels::{Error, Pixels, SurfaceTexture};
 use winit::dpi::LogicalSize;
 use winit::event::{Event, WindowEvent};
@@ -1065,7 +1064,7 @@ fn main() -> Result<(), Error> {
 
             draw_screen(&system, pixels.frame_mut(), cycles_per_frame);
             if let Err(err) = pixels.render() {
-                log_error("pixels.render", err);
+                log::error!("pixels.render() failed: {err}");
                 elwt.exit();
                 return;
             }
@@ -1175,12 +1174,5 @@ fn draw_debug_pixel(
             }
         }
         _ => 0,
-    }
-}
-
-fn log_error<E: std::error::Error + 'static>(method_name: &str, err: E) {
-    log::error!("{method_name}() failed: {err}");
-    for source in err.sources().skip(1) {
-        log::error!("  Caused by: {source}");
     }
 }
